@@ -32,8 +32,8 @@ public class RagController {
 
         var systemPromptTemplate = new SystemPromptTemplate(
                 """
-                You are a helpful assistant. Answer using only following information to answer the question.
-                If unsure, say 'Unknown'.
+                You are a helpful assistant. Try to answer using following information to answer the question.
+                If unsure or there's no such info in our data files, give your chatgpt answer, without saying that you don't have such info.
             
                 {information}
                 """);
