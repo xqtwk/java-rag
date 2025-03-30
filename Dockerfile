@@ -1,20 +1,25 @@
-# Use a lightweight Java runtime image
-FROM eclipse-temurin:21-jre
+# --- Stage 1: Build the app using Maven ---
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
-# Set working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy project and build
-COPY . /app
+# Copy source code and Maven wrapper files
+COPY . .
 
-# Build the app using Maven Wrapper
-RUN ./mvnw clean package -DskipTests
+# Build the application (skipping tests if needed)
+RUN mvn clean package -DskipTests
 
-# Copy the jar file into the container
-COPY target/javarag-1.0.0.jar app.jar
+# --- Stage 2: Run with minimal JRE image ---
+FROM eclipse-temurin:21-jre
 
-# Expose port (adjust if you use another)
+WORKDIR /app
+
+# Copy only the built JAR from the previous stage
+COPY --from=build /app/target/javarag-1.0.0.jar app.jar
+
+# Expose app port
 EXPOSE 8080
 
-# Run the jar
+# Default command
 ENTRYPOINT ["java", "-jar", "app.jar"]
