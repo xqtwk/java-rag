@@ -5,6 +5,7 @@ using **OpenAI** for chat completion and embedding. It allows querying local doc
 
 
 Retrieval-Augmented Generation enhances LLMs by supplying relevant documents from a private knowledge base before generating the answer. This makes answers more grounded and traceable.
+
 ## Table of contents
 <!-- TOC -->
 * [JavaRAG — Retrieval-Augmented Generation (RAG) App with Spring Boot & OpenAI](#javarag--retrieval-augmented-generation-rag-app-with-spring-boot--openai)
@@ -13,13 +14,14 @@ Retrieval-Augmented Generation enhances LLMs by supplying relevant documents fro
   * [Features](#features)
   * [Potential use](#potential-use)
   * [How to run?](#how-to-run)
+    * [Dev locally](#dev-locally)
+    * [As docker cointainer (applyable for server)](#as-docker-cointainer-applyable-for-server)
   * [Endpoints](#endpoints)
     * [endpoint for query](#endpoint-for-query)
     * [endpoint to trigger asynchronous file reindexing POST](#endpoint-to-trigger-asynchronous-file-reindexing-post)
   * [Notes](#notes)
   * [How to split chunks of data in files?](#how-to-split-chunks-of-data-in-files)
 <!-- TOC -->
-
 ## Features
 
 - Retrieval-Augmented Generation using OpenAI
@@ -37,11 +39,13 @@ Retrieval-Augmented Generation enhances LLMs by supplying relevant documents fro
 * Domain-specific copilots
 
 ## How to run?
-locally:
+### Dev locally
+Have matching property uncommented in `application.properties` and use this command:
 ```bash
 mvn spring-boot:run
 ```
-On server side, first you need to build your docker image:
+### As docker cointainer (applyable for server)
+First, you need to build your docker image:
 ```
 docker build -t javarag .           
 ```
