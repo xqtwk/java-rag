@@ -1,5 +1,6 @@
 package x.t.rag;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import x.t.rag.dto.QueryRequest;
 import x.t.rag.dto.QueryResponse;
 
@@ -23,7 +25,7 @@ public class RagController {
     private final VectorStore vectorStore;
 
     @PostMapping("api/v1/rag/query")
-    public ResponseEntity<QueryResponse> queryRag(@RequestBody QueryRequest request) {
+    public Flux<String> queryRag(@RequestBody QueryRequest request) {
         String query = request.query();
         List<Document> similarDocuments = vectorStore.similaritySearch(query);
         String information = similarDocuments.stream()
@@ -45,8 +47,12 @@ public class RagController {
         ));
 
         System.out.println(prompt);
-        QueryResponse response = new QueryResponse(aiClient.prompt(prompt).call().content());
-        return ResponseEntity.ok(response);
+
+        return aiClient.prompt(prompt).stream()
+                .content()
+                .map(response -> response)
+                //.delayElements(Duration.ofMillis(100)) // delay
+                ;
     }
 }
 

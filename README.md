@@ -37,12 +37,21 @@ Retrieval-Augmented Generation enhances LLMs by supplying relevant documents fro
 * Domain-specific copilots
 
 ## How to run?
+locally:
 ```bash
 mvn spring-boot:run
 ```
+On server side, first you need to build your docker image:
+```
+docker build -t javarag .           
+```
+Then you need to create container and let him access external folder with files to index. (Edit "PATH-TO-THE-FOLDER):
+```
+docker run -v "PATH-TO-THE-FOLDER:/app/data" -p 8080:8080 javarag
+```
 ## Endpoints
 ### endpoint for query
-`http://localhost:8080/api/v1/rag/query`
+`/api/v1/rag/query`
 
 Request for a try:
   `
@@ -60,6 +69,7 @@ Request for a try:
 * The vector store is in-memory, so re-indexing is needed on each restart.
 * To persist embeddings, consider integrating with a vector database like Postgres pgvector, Pinecone, or Qdrant.
 * PDF reading uses spring-ai-pdf-document-reader.
+* Application allows to perform file indexing during runtime only when files are located externally - outside running container or in some cloud(To be implemented)
 ## How to split chunks of data in files?
 The data files in repository contain data to demonstrate the work and how data chunks should be split.
 
